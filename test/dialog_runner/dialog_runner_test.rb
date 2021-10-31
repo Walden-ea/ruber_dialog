@@ -1,27 +1,43 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require_relative "../test_helper"
 
 class DialogRunnerTest < Minitest::Test
-    LOTR_DIALOG 
+  include RuberDialog
+  CHAR_1 = Minitest::Mock.new
+  CHAR_1.expect :name, "Gandalf"
 
-    include RuberDialog
-    def test_dialog_runner_can_be_created
-        dialogRunner = DialogRunner
+  CHAR_2 = Minitest::Mock.new
+  CHAR_2.expect :name, "Frodo"
 
-        assert_equal false, dialogRunner.nil?
-    end 
+  MOCK_LINE_1 = Minitest::Mock.new
+  MOCK_LINE_1.expect :char_name, "Gandalf"
+  MOCK_LINE_1.expect :phrase, "Good morning!"
 
-    def test_dialog_runner_can_be_created_from_dialog
-        dialogRunner = DialogRunner.new(Object.new)
+  MOCK_RESPONSE_1 = Minitest::Mock.new
+  MOCK_RESPONSE_1.expect :phrase, "Yes, I will take it"
+  MOCK_RESPONSE_1.expect :next_node, "To Mordor"
 
-        assert_equal false, dialogRunner.nil?
-    end
+  MOCK_RESPONSE_2 = Minitest::Mock.new
+  MOCK_RESPONSE_2.expect :phrase, "No, I won't take it"
+  MOCK_RESPONSE_2.expect :next_node, :end
 
+  MOCK_NODE_1 = Minitest::Mock.new
+  MOCK_NODE_1.expect :name, "Greetings"
+  MOCK_NODE_1.expect :lines, []
+  MOCK_NODE_1.expect :responses, []
 
-    # def test_dialog_runner_runs
+  MOCK_DIALOG = Minitest::Mock.new
+  MOCK_DIALOG.expect :starting_node, nil
+  MOCK_DIALOG.expect :nodes, nil
+  MOCK_DIALOG.expect :characters, [CHAR_1, CHAR_2]
 
-    #     dialog_runner= DialogRunner
+  def test_dialog_runner_created
+    dialog_runner = DialogRunner.new(MOCK_DIALOG)
+    assert_equal false, dialog_runner.nil?
+  end
 
-    # end
+  # def test_runner_runs_one_node
+  #   dialog_runner = DialogRunner.new(MOCK_DIALOG)
+  # end
 end
